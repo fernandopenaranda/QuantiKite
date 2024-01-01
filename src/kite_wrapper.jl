@@ -2,6 +2,7 @@
 #-------------------------------------------------------------------------------------------------
 #             THIS CODE IS INSPIRED BY THE KITE.PY FILE IN KITE AS AN ADAPTATION 
 #              TO ACCEPT QUANTICA.HAMILTONIAN OBJECTS AND JULIA WRITTEN STRUCTS
+#                  REFERENCE: https://quantum-kite.com/documentation/calculation/
 #-------------------------------------------------------------------------------------------------
 
 using HDF5
@@ -13,8 +14,6 @@ include("structures.jl")
 
 const Methods = Union{Dos, Ldos, Conductivity_optical, Conductivity_dc, 
     Conductivity_optical_non_linear, Singleshot_conductivity_dc, Arpes}
-
-# REFERENCE: https://quantum-kite.com/documentation/calculation/
 
 scale_and_shift(h, unitcells, (emin, emax), padfactor = 0.9) = (emax - emin)/2, (emin + emax)/2
 
@@ -49,7 +48,7 @@ function custom_bandrange_arpack(h::AbstractMatrix{T}) where {T}
 end
 
 """
-    `config_system(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = false; kws...)`
+    `h5gen(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = false; kws...)`
 returns an h5 file containing all the information required by KITE to compute the observable
 encoded by `s::Methods`, i.e.: Dos, Ldos, Conductivity_optical, Conductivity_dc, 
 Conductivity_optical_non_linear, Singleshot_conductivity_dc, or Arpes`. `h::Quantica.Hamiltonian`
@@ -58,7 +57,7 @@ calculation.
 
 See: `Configuration`, `Methods`
 """
-function config_system(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = false;
+function h5gen(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = false;
      kws...) where {T<:Methods}
     # reads the type of h or promote it to complex if needed #0 real, #1 complex
     complx = real_or_complex(h, s) 
