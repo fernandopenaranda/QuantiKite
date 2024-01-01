@@ -3,7 +3,7 @@
 ## Description
 
 QuantiKite aims to build a bridge between the two wonderful open-source packages of Quantica.jl[^1] and KITE[^2].
-QuantiKite.jl combines the robust customizability of Quantica.jl in constructing Quantum tight-binding models with efficient Chebyshev-inspired algorithms in KITE for performing real-space bulk spectral calculations in disorderd systems. In-built multithreading and the on-the-fly nature of KITE routines allows to reach enormous system sizes up to multi billion atomic orbitals[^2].
+QuantiKite.jl combines the robust customizability of Quantica.jl in constructing Quantum tight-binding models with efficient Chebyshev-inspired algorithms in KITE for performing real-space bulk spectral calculations in disordered systems. In-built multithreading and the on-the-fly nature of KITE routines allows to reach enormous system sizes up to multi billion atomic orbitals[^2].
 
 Kite routines are based on order N expansions known as the Kernel Polynomial Method (KPM)[^3] and its documentation can be found in [. M. Joao et al., R. Soc. Open Sci. 7, 191809 (2020) [https://royalsocietypublishing.org/doi/full/10.1098/rsos.191809].
 
