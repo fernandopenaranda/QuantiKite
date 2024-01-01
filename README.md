@@ -15,7 +15,7 @@ Kite is a compiled (c++) package that takes as input for its calculations a h5 f
   1. Physical properties of the system including its Hamiltonian together with its modifiers (disorder models, (magnetic) vector potential, etc
   2. Settings for the precise type of calculation (dos, optical conductivities) and instructions for the Chebyshev expansion
 
-QuantiKite aims to write under a friendly API this h5 file required by KITE using information coming from Quantica. More precisely, it provides a function `config_system` which takes an object `h::Quantica.Hamiltonian` containing all physical information about the periodic part of the system and julia structs addressing the points (1) and (2) above, respectively.
+QuantiKite aims to write under a friendly API this h5 file required by KITE using information coming from Quantica. More precisely, it provides a function `h5gen` which takes an object `h::Quantica.Hamiltonian` containing all physical information about the periodic part of the system and julia structs addressing the points (1) and (2) above, respectively.
 
 This Hamiltonian object contains the information about the periodic part of the system and can be regarded as the unit cell that will be repeated in the Bravais lattice directions as many times as determined by the additional settings passed to Kite (see [] or []). Therefore, typically h is a small sparse matrix even if the system under study is very large. The non-periodic part of the system is passed directly to Kite using some fields in the settings (see Examples in or in for more information). 
 
