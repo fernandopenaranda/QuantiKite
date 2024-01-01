@@ -1,7 +1,6 @@
 
 #-------------------------------------------------------------------------------------------------
-#             THIS CODE IS INSPIRED BY THE KITE.PY FILE IN KITE AS AN ADAPTATION 
-#              TO ACCEPT QUANTICA.HAMILTONIAN OBJECTS AND JULIA WRITTEN STRUCTS
+#                     THIS CODE IS INSPIRED BY THE KITE.PY FILE IN KITE.
 #                  REFERENCE: https://quantum-kite.com/documentation/calculation/
 #-------------------------------------------------------------------------------------------------
 
@@ -167,10 +166,9 @@ function real_or_complex(h, s::T) where {T<:Methods}
 end
 
 """
-same harmonics struct
-this struct stores all hoppings between elements two unit cells with relative index dn = [i,j]
-if i = j = 0 corresponding to the matrix elements between orbitals inside the unitcell, it also
-stores the onsite energies"""
+This struct stores all the hoppings between the elements connecting two unit cells with relative 
+index dn = [i,j] if i = j = 0 corresponding to the matrix elements between orbitals inside the unitcell,
+it also stores the onsite energies"""
 struct Same_harm{N,T}
     dn                          # harmonic coordinates [dn[1], dn[2]]. Unitcell at [0,0]
     orb_from::Array{N, 1}       # orbital of origin `i` in `h[(dn[1], dn[2])][i, j]`
@@ -227,9 +225,9 @@ end
 
 """
 We need to pass the information to the hdf5 in a very precise manner so we can use the Kitex
-code without further modifications. This is done is this function which is suited for the general
+code without further modifications. This is done in this function which is suited for the general
 case of multiorbital systems where different sites can host different number of orbitals. The output
-are the two arrays `t` and `d` containing the Hamiltonian matrix elements (onsites included) and its
+are the two arrays `t` and `d` containing the Hamiltonian matrix elements (onsites included) and their
 indices in an unique way (see Kite.py documentaion). It is valid for 2D and 3D systems.
 """
 function matrix_elements_and_distances(orb_from, orb_to, vals)
