@@ -5,12 +5,7 @@
 #                  REFERENCE: https://quantum-kite.com/documentation/calculation/
 #-------------------------------------------------------------------------------------------------
 
-using HDF5
-using Arpack
-using Quantica
-using SparseArrays
 
-include("structures.jl")
 
 const Methods = Union{Dos, Ldos, Conductivity_optical, Conductivity_dc, 
     Conductivity_optical_non_linear, Singleshot_conductivity_dc, Arpes}

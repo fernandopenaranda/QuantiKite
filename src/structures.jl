@@ -1,5 +1,3 @@
-using HDF5
-
 # REFERENCE: https://quantum-kite.com/documentation/calculation/
 
 # TO DO: structs GAUSSIAN WAVE PACKET
