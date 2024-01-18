@@ -2,16 +2,19 @@
 
 ## Description
 
-QuantiKite aims to build a bridge between the two wonderful open-source packages of Quantica.jl[^1] and KITE[^2].
-QuantiKite.jl combines the robust customizability of Quantica.jl in constructing Quantum tight-binding models with KITE's efficient Chebyshev-inspired algorithms for performing real-space bulk spectral calculations in disordered systems. In-built multithreading and the on-the-fly nature of KITE routines allows to reach enormous system sizes up to multi billion atomic orbitals[^2].
+**QuantiKite** is an open-source Julia software which builds a bridge between the two open-source packages of [**Quantica**](https://github.com/pablosanjose/Quantica.jl/tree/master) and [**KITE**](https://github.com/quantum-kite/kite).
+It combines the robust customizability of Quantica.jl in constructing quantum tight-binding models with KITE's efficient Chebyshev-inspired algorithms for performing **real-space** bulk spectral and transport calculations in disordered systems. In-built multithreading and the on-the-fly nature of KITE routines allow to reach enormous system sizes (up to multi billion atomic orbitals according to KITE's [documentation](https://github.com/quantum-kite/kite)).
 
-Kite routines are order-N approximate and are based the Kernel Polynomial Method (KPM)[^3]. See [. M. Joao et al., R. Soc. Open Sci. 7, 191809 (2020) [https://royalsocietypublishing.org/doi/full/10.1098/rsos.191809].
+KITE uses order-N approximate routines based on the **Kernel Polynomial Method**[^1]. For detailed information see: [M. Joao et al., R. Soc. Open Sci. 7, 191809 (2020)][https://royalsocietypublishing.org/doi/full/10.1098/rsos.191809].
 
-This package is purely written in Julia as Quantica, so there is no need to interface with different programming languages.
+In summary, this package offers a new entry point for KITE software for the Julia Community.
+
+### References
+
 
 ## Workflow
 
-Kite is a compiled (c++) package that takes as input an h5 file containing information about:
+**KITE** is a compiled (C++) package that takes as input an h5 file containing information about:
   1. Physical properties of the system including its Hamiltonian together with its modifiers (disorder models, (magnetic) vector potential, etc
   2. Settings for the precise type of calculation (dos, optical conductivities) and instructions for the Chebyshev expansion
 
