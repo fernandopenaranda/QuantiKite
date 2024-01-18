@@ -1,7 +1,5 @@
 <img src="logo.png" alt="drawing" width="300"/>
 
-# QuantiKite: A wrapper between [Quantica](https://github.com/pablosanjose/Quantica) and [Kite](https://github.com/quantum-kite/kite)
-
 **QuantiKite** is an open-source Julia software which builds a bridge between the two open-source packages of [**Quantica**](https://github.com/pablosanjose/Quantica.jl/tree/master) and [**KITE**](https://github.com/quantum-kite/kite).
 It combines the robust customizability of Quantica.jl in constructing quantum tight-binding models with KITE's efficient Chebyshev-inspired algorithms for performing **real-space** bulk spectral and transport calculations in disordered systems. 
 
@@ -18,7 +16,7 @@ In summary, this package offers a new access to KITE software for the Julia Comm
 
 **KITE** is a compiled (C++) package that takes as input an h5 file containing information about:
   1. Physical properties of the system including its Hamiltonian together with its modifiers (disorder models, (magnetic) vector potential, etc...)
-  2. Calculation settings: which observable will be computed and providing instructions for the Chebyshev expansion.
+  2. Calculation settings: which observable will be computed and which instructions are needed for the Chebyshev expansion.
 
 This .h5 file is generated through a Python interface that uses [Pybinding](https://docs.pybinding.site/en/stable/) software.
 
