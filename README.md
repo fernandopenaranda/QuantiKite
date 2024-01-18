@@ -1,5 +1,9 @@
 <img src="logo.png" alt="drawing" width="300"/>
 
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://fernandopenaranda.github.io/QuantiKite.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://fernandopenaranda.github.io/QuantiKite.jl/dev/)
+[![Build Status](https://github.com/fernandopenaranda/QuantiKite.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/fernandopenaranda/QuantiKite.jl/actions/workflows/CI.yml?query=branch%3Amain)
+
 **QuantiKite** is an open-source Julia software which builds a bridge between the two open-source packages of [**Quantica**](https://github.com/pablosanjose/Quantica.jl/tree/master) and [**KITE**](https://github.com/quantum-kite/kite).
 It combines the robust customizability of Quantica.jl in constructing quantum tight-binding models with KITE's efficient Chebyshev-inspired algorithms for performing **real-space** bulk spectral and transport calculations in disordered systems. 
 
@@ -51,8 +55,3 @@ These include, e.g.: lattice and onsite disorder and Peierls phases as a result 
 ## Acknowledgements
 
 Funding for this project was obtained through the PID2021-128760NB-I00 project: *Multiscale modeling of twisted bilayer graphene*.
-
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://fernandopenaranda.github.io/QuantiKite.jl/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://fernandopenaranda.github.io/QuantiKite.jl/dev/)
-[![Build Status](https://travis-ci.com/fernandopenaranda/QuantiKite.jl.svg?branch=main)](https://travis-ci.com/fernandopenaranda/QuantiKite.jl)
-[![Coverage](https://codecov.io/gh/fernandopenaranda/QuantiKite.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/fernandopenaranda/QuantiKite.jl)
