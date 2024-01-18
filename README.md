@@ -6,7 +6,7 @@ It combines the robust customizability of Quantica.jl in constructing quantum ti
 In-built multithreading and the on-the-fly nature of KITE routines allow to reach enormous system sizes (up to multi billion atomic orbitals according to KITE's [documentation](https://github.com/quantum-kite/kite)).
 
 KITE uses order-N approximate routines based on the **Kernel Polynomial Method**[^1][^2].
-f
+
 In summary, this package offers a new access to KITE software for the Julia Community.
 
 [^1]: Weiße, A., Wellein, G., Alvermann, A., & Fehske, H. (2006). The kernel polynomial method. [Rev. Mod. Phys., 78, 275–306](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.78.275).
@@ -44,7 +44,7 @@ These include, e.g.: lattice and onsite disorder and Peierls phases as a result 
 
 ## Contributors
 
-[Pablo San-Jose](https://github.com/pablosanjose): Guidance project design and integration with Quantica.
+[Pablo San-Jose](https://github.com/pablosanjose): Guidance on project design and integration with Quantica.
 
 ## Acknowledgements
 
