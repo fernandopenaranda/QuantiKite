@@ -20,11 +20,12 @@ In summary, this package offers a new access to KITE software for the Julia Comm
 
 This .h5 file is generated through a Python interface that uses [Pybinding](https://docs.pybinding.site/en/stable/) software.
 
-QuantiKite replaces this dependency on Python code by a new API in Julia based on Quantica.jl. More precisely, the exported function `h5gen`, which takes an object `h::Quantica.Hamiltonian` containing all physical information about the periodic part of the system, and julia structs addressing the points (1) and (2) above, respectively.
+QuantiKite replaces this dependency on Python code by a new API in Julia based on Quantica.jl. It reads as follows: 
+The exported function `h5gen` generates a .h5 file taking as inputs: an object `h::Quantica.Hamiltonian` containing all physical information about the periodic part of the system, and julia structs addressing points (1) and (2) above, respectively.
 
-This Hamiltonian object contains the information about the periodic part of the system and can be regarded as the unit cell that will be repeated in the Bravais lattice directions as many times as determined by the additional settings passed to KITE. Therefore, typically `h` is a small sparse matrix even if the system under study is very large. The non-periodic part of the system is passed directly to KITE using some fields in the settings (see Examples in or in for more information). 
+This Hamiltonian object can be regarded as the unit cell that will be repeated in the Bravais lattice directions as many times as determined by the additional settings passed to KITE. Therefore, typically `h` is a small sparse matrix even if the system under study is very large. The non-periodic part of the system is passed directly to KITE using some fields in the settings (see the [Examples](https://github.com/fernandopenaranda/QuantiKite/tree/main/examples) section). 
 
-Once the h5 file is generated it can be passed to KITE compilers (KITEx and KITE-tools) to  compiled functions to perform the desired calculation. Some plotting functions based on [Makie.jl](https://docs.makie.org/stable/) are also provided for an easy visualization of the KITE outcomes.
+Once the h5 file is generated it can be passed to KITE's compilers (KITEx and KITE-tools) to perform the desired calculation[^2]. Some plotting functions based on [Makie.jl](https://docs.makie.org/stable/) are also provided for an easy visualization of the KITE outcomes.
 
 ## Available functionalities
 In this initial version of QuantiKite, we do not have access to the complete catalog of Kite functionalities. At the time of this proof-of-concept release QuantiKite is only suited for  the following calculations in systems with periodic disorder (within the unitcell):
