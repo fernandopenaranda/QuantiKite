@@ -1,14 +1,16 @@
 # QuantiKite: A wrapper between [Quantica](https://github.com/pablosanjose/Quantica) and [Kite](https://github.com/quantum-kite/kite)
 
 **QuantiKite** is an open-source Julia software which builds a bridge between the two open-source packages of [**Quantica**](https://github.com/pablosanjose/Quantica.jl/tree/master) and [**KITE**](https://github.com/quantum-kite/kite).
-It combines the robust customizability of Quantica.jl in constructing quantum tight-binding models with KITE's efficient Chebyshev-inspired algorithms for performing **real-space** bulk spectral and transport calculations in disordered systems. In-built multithreading and the on-the-fly nature of KITE routines allow to reach enormous system sizes (up to multi billion atomic orbitals according to KITE's [documentation](https://github.com/quantum-kite/kite)).
+It combines the robust customizability of Quantica.jl in constructing quantum tight-binding models with KITE's efficient Chebyshev-inspired algorithms for performing **real-space** bulk spectral and transport calculations in disordered systems. 
 
-KITE uses order-N approximate routines based on the **Kernel Polynomial Method**[^1]. For detailed information see: [M. Joao et al., R. Soc. Open Sci. 7, 191809 (2020)][https://royalsocietypublishing.org/doi/full/10.1098/rsos.191809].
+In-built multithreading and the on-the-fly nature of KITE routines allow to reach enormous system sizes (up to multi billion atomic orbitals according to KITE's [documentation](https://github.com/quantum-kite/kite)).
 
-In summary, this package offers a new entry point for KITE software for the Julia Community.
+KITE uses order-N approximate routines based on the **Kernel Polynomial Method**[^1][^2].
+f
+In summary, this package offers a new access to KITE software for the Julia Community.
 
-### References
-
+[^1]: Weiße, A., Wellein, G., Alvermann, A., & Fehske, H. (2006). The kernel polynomial method. [Rev. Mod. Phys., 78, 275–306](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.78.275).
+[^2]: M. Joao et al., R. Soc (2020). KITE: high-performance accurate modelling of electronic structure and response functions of large molecules, disordered crystals and heterostructures. [Open Sci. 7, 191809 ](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.78.275).
 
 ## Workflow
 
@@ -38,7 +40,7 @@ Which constitute a comprehensive but not exhaustive list of KITE possibilities.
 
 A generalization to cover the full functionality of KITE will be soon addressed, including the important feature of non-periodic modifiers (beyond unit-cell disorder) which makes profit of the on-the-fly nature of KITE routines.
    
-These include, e.g.: (random) lattice and onsite disorder and Peierls phases as a result of magnetic vector potentials.
+These include, e.g.: lattice and onsite disorder and Peierls phases as a result of magnetic vector potentials.
 
 ## Contributors
 
@@ -46,13 +48,9 @@ These include, e.g.: (random) lattice and onsite disorder and Peierls phases as 
 
 ## Acknowledgements
 
-Funding for this project was obtained through. PID2021-128760NB-I00: "Multiscale modeling of twisted bilayer graphene"
+Funding for this project was obtained through the PID2021-128760NB-I00 project: *Multiscale modeling of twisted bilayer graphene*.
 
 [![Build Status](https://github.com/fernandopenaranda/QuantiKite.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/fernandopenaranda/QuantiKite.jl/actions/workflows/CI.yml?query=branch%3Amain)
-
-https://github.com/fernandopenaranda/ChebyshevExpansions.git
-
-
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://fernandopenaranda.github.io/QuantiKite.jl/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://fernandopenaranda.github.io/QuantiKite.jl/dev/)
 [![Build Status](https://github.com/fernandopenaranda/QuantiKite.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/fernandopenaranda/QuantiKite.jl/actions/workflows/CI.yml?query=branch%3Amain)
