@@ -189,7 +189,8 @@ function site_positions(h) # site positions for each orbital in the TB matrix
     position_atoms = h.lattice.unitcell.sites
     num_orbitals = Quantica.norbitals(h) # vector of num_orbitals at site i
     for i in 1:length(position_atoms)
-        for j in 1:num_orbitals[i]
+        for sublat_ind in 1:length(num_orbitals) ##JAP Modified this line to accomodate systems where number of atoms in unit cell does not equal number of sublattices (twisted bilayer)
+        for j in 1:num_orbitals[sublat_ind]
             push!(positions, position_atoms[i])
         end
     end
@@ -270,7 +271,7 @@ function set_prec(is_complex, precision)
         throw(ArgumentError("Precision should be 0, 1 or 2"))
         end
     else
-        if precision == 1
+        if precision == 0
             htype = ComplexF16
         elseif precision == 1
             htype = ComplexF32
