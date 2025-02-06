@@ -203,6 +203,14 @@ function site_positions(h) # site positions for each orbital in the TB matrix
     return positions
 end
 
+function get_num_orbitals(h) #JAP Calculate total number of orbitals in unit cell 
+
+    orb_per_sublat = h.blockstruct.subsizes
+    atomic_orb = h.blockstruct.blocksizes
+
+    return orb_per_sublat' * atomic_orb
+end
+
 function hdf5_rearrangefunction(h, energy_scale, energy_shift, space_size)
     h_info = hdf5_hamiltonian(h, energy_scale, energy_shift)
     # list of origin orbital indices for all dns
