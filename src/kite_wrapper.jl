@@ -81,7 +81,8 @@ function h5gen(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = f
     f["DIM"] = UInt32(space_size) # space dimension of the lattice 1D, 2D, 3D
     f["LattVectors"] = vectors.parent
     f["OrbPositions"] = Matrix(hcat(position...)) 
-    f["NOrbitals"] = UInt32(sum(Quantica.norbitals(h)))
+    #f["NOrbitals"] = UInt32(sum(Quantica.norbitals(h)))
+    f["NOrbitals"] = UInt32(get_num_orbitals(h)) #JAP this gets the total num of orbitals and not just sublattices 
     f["EnergyScale"] = Float64(energy_scale)
     f["EnergyShift"] = Float64(energy_shift)
     
@@ -183,17 +184,31 @@ struct Hdf5_h
     s::Vector{Same_harm}
 end
 
-function site_positions(h) # site positions for each orbital in the TB matrix
+function site_positions(h) # site positions for each orbital in the TB matrix   
     # it accepts systems with different orbitals at different sites
     positions = []
     position_atoms = h.lattice.unitcell.sites
+    print(length(position_atoms))
     num_orbitals = Quantica.norbitals(h) # vector of num_orbitals at site i
-    for i in 1:length(position_atoms)
-        for j in 1:num_orbitals[i]
-            push!(positions, position_atoms[i])
+    num_sites = length(position_atoms)
+    num_sublat = length(num_orbitals)
+    chunks = Iterators.partition(1:num_sites,div(num_sites,num_sublat))
+    for (sublat_ind,chunk) in enumerate(chunks)
+        for i in chunk
+            for j in 1:num_orbitals[sublat_ind]
+                push!(positions, position_atoms[i])
+            end
         end
     end
     return positions
+end
+
+function get_num_orbitals(h) #JAP Calculate total number of orbitals in unit cell 
+
+    orb_per_sublat = h.blockstruct.subsizes
+    atomic_orb = h.blockstruct.blocksizes
+
+    return orb_per_sublat' * atomic_orb
 end
 
 function hdf5_rearrangefunction(h, energy_scale, energy_shift, space_size)
@@ -270,7 +285,7 @@ function set_prec(is_complex, precision)
         throw(ArgumentError("Precision should be 0, 1 or 2"))
         end
     else
-        if precision == 1
+        if precision == 0
             htype = ComplexF16
         elseif precision == 1
             htype = ComplexF32
