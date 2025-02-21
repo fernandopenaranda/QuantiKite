@@ -188,7 +188,6 @@ function site_positions(h) # site positions for each orbital in the TB matrix
     # it accepts systems with different orbitals at different sites
     positions = []
     position_atoms = h.lattice.unitcell.sites
-    print(length(position_atoms))
     num_orbitals = Quantica.norbitals(h) # vector of num_orbitals at site i
     num_sites = length(position_atoms)
     num_sublat = length(num_orbitals)
@@ -230,7 +229,7 @@ function hdf5_hamiltonian(h, energy_scale, energy_shift) #vals are KPM rescaled
     dn_resolved_info = []
     for har in Quantica.harmonics(h) 
         dn = Quantica.dcell(har)
-        orb_from, orb_to, vals = findnz(dropzeros(h[dn]))
+        orb_from, orb_to, vals = findnz(dropzeros(copy(h[dn]'))) # JAP added transpose here
         onsite_indx = findall(x-> x == 0, orb_from - orb_to)
         vals[onsite_indx] .-= energy_shift/energy_scale # rescaled shift for onsites
         push!(dn_resolved_info, Same_harm(dn, orb_from, orb_to, vals./ energy_scale))
@@ -246,7 +245,7 @@ are the two arrays `t` and `d` containing the Hamiltonian matrix elements (onsit
 indices in an unique way (see Kite.py documentaion). It is valid for 2D and 3D systems.
 """
 function matrix_elements_and_distances(orb_from, orb_to, vals)
-    smat = sparse(orb_from .+ 1, orb_to, vals) #cuidado con los indices + 1 in orb_to??
+    smat = sparse(orb_from .+ 1, orb_to .+ 1, vals) #cuidado con los indices + 1 in orb_to?? //JAP added +1 to orb_to here, remove it later in cols, so that harmonic [-1,-1] (index 0) does not give an error here
 
     # fix the size of hoppings and distance matrices where the number of columns is max number of 
     # hoppings this step is necessary to include the most general multiorbital case, i.e., sites 
@@ -259,10 +258,11 @@ function matrix_elements_and_distances(orb_from, orb_to, vals)
     for i in 1:size(smat,1)
         push!(t_list, nonzeros(smat[i,:])) # make it real if smat is real.
         cols, _ = findnz(smat[i,:])
+        cols .-= 1 #JAP now I remove the previous +1 to be coherent with KITE
         push!(d_list, cols)
     end
     
-    t = zeros(size(smat,1), max_orb_connectivity)       # add type
+    t = zeros(eltype(smat),size(smat,1), max_orb_connectivity)       # add type #JAP added type of smat
     d = zeros(Int, size(smat,1), max_orb_connectivity)  # add type
 
     for (i_row, d_row) in enumerate(d_list)
