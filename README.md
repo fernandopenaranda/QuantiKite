@@ -52,6 +52,7 @@ These include, e.g.: lattice and onsite disorder and Peierls phases as a result 
 ## Contributors
 
 [Pablo San-Jose](https://github.com/pablosanjose): Guidance on project design and integration with Quantica.
+[João Pinho][https://github.com/nitrobino]: QuantiKite integration.
 
 ## Acknowledgements
 
