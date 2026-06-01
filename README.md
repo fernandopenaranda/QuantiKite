@@ -17,6 +17,20 @@ In summary, this package offers a new access to KITE software for the Julia Comm
 [^1]: Weiße, A., Wellein, G., Alvermann, A., & Fehske, H. (2006). The kernel polynomial method. [Rev. Mod. Phys., 78, 275–306](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.78.275).
 [^2]: M. Joao et al., R. Soc (2020). KITE: high-performance accurate modelling of electronic structure and response functions of large molecules, disordered crystals and heterostructures. [Open Sci. 7, 191809 ](https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.78.275).
 
+### Cite
+
+```bibtex
+@software{penaranda_quantikite,
+  author    = {Fernando Peñaranda},
+  title     = {{fernandopenaranda/QuantiKite: v0.2.0}},
+  version   = {v0.2.0},
+  year      = {2024},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.10528698},
+  url       = {https://doi.org/10.5281/zenodo.10528698}
+}
+```
+
 ## Workflow
 
 **KITE** is a compiled (C++) package that takes as input an h5 file containing information about:
