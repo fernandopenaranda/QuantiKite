@@ -22,7 +22,7 @@ In summary, this package offers a new access to KITE software for the Julia Comm
 ```bibtex
 @software{penaranda_quantikite,
   author    = {Fernando Peñaranda},
-  title     = {{fernandopenaranda/QuantiKite: v0.2.0}},
+  title     = {{fernandopenaranda/QuantiKite.jl}},
   version   = {v0.2.0},
   year      = {2024},
   publisher = {Zenodo},
