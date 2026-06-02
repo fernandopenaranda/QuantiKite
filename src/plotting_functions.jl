@@ -1,7 +1,7 @@
 function dos_plot(filename)
     # Read data from a .dat file
     data = readdlm(filename)
-    # Extract columns for x and y
+    # Extract columns for x and y 
     x = data[:, 1]
     y = data[:, 2]
     f = Figure()
