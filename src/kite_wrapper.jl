@@ -179,8 +179,22 @@ function h5gen(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = f
         grpc_p["NumRandoms"] = [Int32(s.settings.num_random)]
         grpc_p["NumDisorder"] = [Int32(s.settings.num_disorder)] 
         grpc_p["Temperature"] =  [s.temperature/energy_scale] # KPM rescaled
-        grpc_p["Direction"] = [Int(s.direction)]
-        grpc_p["Special"] = [Int(s.special)]
+        grpc_p["Direction"] = [Int32(s.direction)]
+        grpc_p["Special"] = [Int32(s.special)]
+        # Build direction string from integer, e.g. 6 → "xyz"  (same as num2str3 in C++)
+        dir = I_AVAIL_DIRS_SOC[s.direction]   # you need this helper — see below
+        NM = s.settings.num_moments
+        if s.special != 1
+        # general case: Gamma0 (1D), Gamma1 (2D), Gamma2 (2D), Gamma3 (3D)
+            grpc_p["Gamma0" * dir] = zeros(ComplexF64, 1, NM)
+            grpc_p["Gamma1" * dir] = zeros(ComplexF64, NM, NM)
+            grpc_p["Gamma2" * dir] = zeros(ComplexF64, NM, NM)
+            grpc_p["Gamma3" * dir] = zeros(ComplexF64, Int(NM * NM), NM)
+        else
+        # special case: only Gamma1 and Gamma2 if symmetries make Gamma 3 to vanish
+            grpc_p["Gamma1" * dir] = zeros(ComplexF64, NM, NM)
+            grpc_p["Gamma2" * dir] = zeros(ComplexF64, NM, NM)
+    end
     else nothing end
     close(f)
     println("A .h5 file has been generated")
@@ -242,10 +256,8 @@ function site_positions(h) # site positions for each orbital in the TB matrix
 end
 
 function get_num_orbitals(h) #JAP Calculate total number of orbitals in unit cell 
-
     orb_per_sublat = h.blockstruct.subsizes
     atomic_orb = h.blockstruct.blocksizes
-
     return orb_per_sublat' * atomic_orb
 end
 

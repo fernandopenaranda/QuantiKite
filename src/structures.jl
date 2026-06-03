@@ -37,6 +37,26 @@ struct that contains as fields the settings passed to the KPM calculation. These
     (see: https://royalsocietypublishing.org/doi/full/10.1098/rsos.191809)
 
 """
+const AVAIL_DIRS_OC = Dict("xx" => 0, "yy" => 1, "zz" => 2, "xy" => 3, "xz" => 4, "yx" => 5, "yz" => 6, "zx" => 7, "zy" => 8)
+
+const AVAIL_DIRS_SC = Dict("xx" => 0, "yy" => 1, "zz" => 2)
+
+const AVAIL_DIRS_DC = Dict("xx" => 0, "yy" => 1, "zz" => 2, "xy" => 3, "xz" => 4, "yx" => 5, "yz" => 6, "zx" => 7, "zy" => 8)
+
+const AVAIL_DIRS_SOC = Dict{String, Int32}( # dict for second order optical responses
+    "xxx" => 0,  "xxy" => 1,  "xxz" => 2,
+    "xyx" => 3,  "xyy" => 4,  "xyz" => 5,
+    "xzx" => 6,  "xzy" => 7,  "xzz" => 8,
+    "yxx" => 9,  "yxy" => 10, "yxz" => 11,
+    "yyx" => 12, "yyy" => 13, "yyz" => 14,
+    "yzx" => 15, "yzy" => 16, "yzz" => 17,
+    "zxx" => 18, "zxy" => 19, "zxz" => 20,
+    "zyx" => 21, "zyy" => 22, "zyz" => 23,
+    "zzx" => 24, "zzy" => 25, "zzz" => 26
+)
+const I_AVAIL_DIRS_SOC = Dict{Int32, String}(v => k for (k, v) in AVAIL_DIRS_SOC) # inverse dir
+
+
 struct Configuration{N, M}
     divisions::NTuple{N, Int}
     unitcells::NTuple{N, Int}
@@ -157,12 +177,11 @@ conductivity_optical(config::Configuration; num_points, num_moments, num_random,
     conductivity_optical(KPM_precision(num_points, num_moments, num_random, num_disorder), direction, temperature)
 
 function conductivity_optical(settings::KPM_precision, direction, temperature) 
-    avail_dirs = Dict("xx" => 0, "yy" => 1, "zz" => 2, "xy" => 3, "xz" => 4, "yx" => 5, "yz" => 6, "zx" => 7, "zy" => 8)
     dir = -1
-    if haskey(avail_dirs, direction)
-        dir = avail_dirs[direction]
+    if haskey(AVAIL_DIRS_OC, direction)
+        dir = AVAIL_DIRS_OC[direction]
     else
-        throw(ArgumentError("$(direction) is not in the list of available methods: $(keys(avail_dirs))"))
+        throw(ArgumentError("$(direction) is not in the list of available methods: $(keys(AVAIL_DIRS_OC))"))
     end
     return Conductivity_optical(settings, dir, temperature)
 end
@@ -173,23 +192,19 @@ Important: out of plane components in 2D systems are not valid..,
 """
 struct Conductivity_optical_non_linear
     settings::KPM_precision
-    direction::String
+    direction::Int32
     temperature::Float64
-    special::Int # Optional parameters, forward special, a parameter that can simplify the calculation for some materials.? Default to 0
+    special::Int32 # Optional parameters, forward special, a parameter that can simplify the calculation for some materials.? Default to 0
 end
 
 conductivity_optical_non_linear(config::Configuration; num_points, num_moments, num_random, num_disorder, direction, temperature = 0.0, special = 0) = 
 conductivity_optical_non_linear(KPM_precision(num_points, num_moments, num_random, num_disorder), direction, temperature, special)
 
-function conductivity_optical_nonlinear(settings::KPM_precision, direction, temperature, special) 
-    avail_dirs = Dict("xxx" => 0, "xxy" => 1, "xxz" => 2, "xyx" => 3, "xyy" => 4, "xyz" => 5, "xzx" => 6, "xzy" => 7,
-    "xzz" => 8, "yxx" => 9, "yxy" => 10, "yxz" => 11, "yyx" => 12, "yyy" => 13, "yyz" => 14, "yzx" => 15,
-    "yzy" => 16, "yzz" => 17, "zxx" => 18, "zxy" => 19, "zxz" => 20, "zyx" => 21, "zyy" => 22, "zyz" => 23,
-    "zzx" => 24, "zzy" => 25, "zzz" => 26)
-    if direction ∈ keys(avail_dirs) == false
-        throw(ArgumentError("$(direction) is not in the list of available methods: $(keys(avail_dirs))"))
+function conductivity_optical_non_linear(settings::KPM_precision, direction, temperature, special) 
+    if direction ∈ keys(AVAIL_DIRS_SOC) == false
+        throw(ArgumentError("$(direction) is not in the list of available methods: $(keys(AVAIL_DIRS_SOC))"))
     else nothing end
-    return Conductivity_optical_nonlinear(settings, direction, temperature, special)
+    return Conductivity_optical_non_linear(settings, AVAIL_DIRS_SOC[direction], temperature, special)
 end
 
 """
@@ -220,9 +235,8 @@ conductivity_dc(config::Configuration, num_points, num_moments, num_random, num_
     conductivity_dc(KPM_precision(num_points, num_moments, num_random, num_disorder), direction, temperature)
 
 function conductivity_dc(settings::KPM_precision, direction, temperature) 
-    avail_dirs = Dict("xx" => 0, "yy" => 1, "zz" => 2, "xy" => 3, "xz" => 4, "yx" => 5, "yz" => 6, "zx" => 7, "zy" => 8)
-    if direction ∈ keys(avail_dirs) == false
-        throw(ArgumentError("$(direction) is not in the list of available methods: $(keys(avail_dirs))"))
+    if direction ∈ keys(AVAIL_DIRS_DC) == false
+        throw(ArgumentError("$(direction) is not in the list of available methods: $(keys(AVAIL_DIRS_DC))"))
     else nothing end
     return Conductivity_dc(settings, direction, temperature)
 end
@@ -246,9 +260,8 @@ singleshot_conductivity_dc(config::Configuration, num_moments, num_random, num_d
     singleshot_conductivity_dc(KPM_precision(1, num_moments, num_random, num_disorder),  energy, direction, eta, preserve_disorder)
 
 function singleshot_conductivity_dc(settings::KPM_precision, energy, direction, eta, preserve_disorder) 
-    avail_dirs = Dict("xx" => 0, "yy" => 1, "zz" => 2)
-    if direction ∈ keys(avail_dirs) == false
-        throw(ArgumentError("$(direction) is not in the list of available methods: $(keys(avail_dirs))"))
+    if direction ∈ keys(AVAIL_DIRS_SC) == false
+        throw(ArgumentError("$(direction) is not in the list of available methods: $(keys(AVAIL_DIRS_SC))"))
     else nothing end
     return Singleshot_conductivity_dc(settings, energy, direction, eta, preserve_disorder)
 end
