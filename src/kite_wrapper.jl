@@ -72,6 +72,7 @@ function h5gen(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = f
     filename = ifelse(isa(filename, Nothing), "kite_config.h5", filename)
     disorder = return_kwargs(kws, :disorder)
     disorder_structural = return_kwargs(kws, :disorder_structural)
+    vacancies =  return_kwargs(kws, :vacancies)
 
 
     f = h5open(filename, "w")
@@ -82,7 +83,8 @@ function h5gen(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = f
     f["LattVectors"] = vectors.parent
     f["OrbPositions"] = Matrix(hcat(position...)) 
     #f["NOrbitals"] = UInt32(sum(Quantica.norbitals(h)))
-    f["NOrbitals"] = UInt32(get_num_orbitals(h)) #JAP this gets the total num of orbitals and not just sublattices 
+    numorbitals =  UInt32(get_num_orbitals(h))
+    f["NOrbitals"] = numorbitals  #JAP this gets the total num of orbitals and not just sublattices 
     f["EnergyScale"] = Float64(energy_scale)
     f["EnergyShift"] = Float64(energy_shift)
     
@@ -102,21 +104,58 @@ function h5gen(h::Quantica.Hamiltonian, c::Configuration, s::T, modification = f
     grp["CustomLocalEnergy"] = 0
     grp["PrintCustomLocalEnergy"] = 0
     
+    #vacancies are implemented 
+    if vacancies ≠ nothing
+        grp_vac = create_group(grp, "Vacancy")
+        g = create_group(grp_vac, "Type0")
+        val = return_kwargs(kws, :Concentration)
+        g["Concentration"] = ones(Float64, numorbitals) .* val
+        g["NumOrbitals"]   = Int32(numorbitals)
+        g["Orbitals"]      = Int32.(collect(0:numorbitals-1))
+    end
+
     # !!! The disorder group has to be specified in advance. Defaulted to none
     grp_dis = create_group(grp, "Disorder")   
     datatype = Float32
-    dset = create_dataset(grp_dis, "OnsiteDisorderMeanStdv", datatype, (1,0))
-    write(dset, zeros(Float64, 0, 1))
-    dset = create_dataset(grp_dis, "OnsiteDisorderMeanValue", datatype, (1,0))
-    write(dset, zeros(Float64, 0, 1))
-    dset = create_dataset(grp_dis, "OnsiteDisorderModelType", datatype, (1,0))
-    write(dset, zeros(Float64, 0, 1))
-    dset = create_dataset(grp_dis, "OrbitalNum", datatype, (1,0))
-    write(dset, zeros(Float64, 0, 1))
+    if disorder === nothing
+        dset = create_dataset(grp_dis, "OnsiteDisorderMeanStdv", datatype, (1,0))
+        write(dset, zeros(Float64, 0, 1))
+        dset = create_dataset(grp_dis, "OnsiteDisorderMeanValue", datatype, (1,0))
+        write(dset, zeros(Float64, 0, 1))
+        dset = create_dataset(grp_dis, "OnsiteDisorderModelType", datatype, (1,0))
+        write(dset, zeros(Float64, 0, 1))
+        dset = create_dataset(grp_dis, "OrbitalNum", datatype, (1,0))
+        write(dset, zeros(Float64, 0, 1))
+    else  
+        # disorder applies with the same std val and model to all orbitals where orbitals means 
+        # sublattice or atomic orbital. Although at a given site onsite potential can be different
+        val = return_kwargs(kws, :OnsiteDisorderMeanStdv)
+        # grp_dis["OnsiteDisorderMeanStdv"] = [Float64(val)]
+        grp_dis["OnsiteDisorderMeanStdv"] = ones(Float64, numorbitals) .* val
+        val = return_kwargs(kws, :OnsiteDisorderMeanValue)
+        grp_dis["OnsiteDisorderMeanValue"] = ones(Float64, numorbitals) .* val
+        val = return_kwargs(kws, :OnsiteDisorderModelType)
+        if val === :gaussian #'Gaussian': 1, 'Uniform': 2 and 'Deterministic': 3.
+            # grp_dis["OnsiteDisorderModelType"] = [Int32(1)]
+            grp_dis["OnsiteDisorderModelType"] = ones(Int32, numorbitals) .* 1
+        elseif val === :uniform
+            # grp_dis["OnsiteDisorderModelType"] = [Int32(2)]
+            grp_dis["OnsiteDisorderModelType"] =  ones(Int32, numorbitals) .* 2
+        else val === :deterministic
+            # grp_dis["OnsiteDisorderModelType"] = [Int32(3)]
+            grp_dis["OnsiteDisorderModelType"] =  ones(Int32, numorbitals) .* 13
+        end
+        # grp_dis["OrbitalNum"] = Int32[val;;] # I think this would apply to orbital val only
+        grp_dis["OrbitalNum"] = reshape(Int32.(collect(0:numorbitals-1)), numorbitals, 1)
+    end
     
+    # structural disorder yet to be implemented. It contains vacancies and bond disorder.
+
     #---------------------------------------------------------------------------- CALCULATION GROUP
-    grpc = create_group(f, "Calculation")
     
+    
+    
+    grpc = create_group(f, "Calculation")
     if isa(s, Dos)
         grpc_p = create_group(grpc, "dos")
         grpc_p["NumMoments"] = [Int32(s.settings.num_moments)]
