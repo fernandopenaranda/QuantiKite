@@ -24,7 +24,7 @@ function scale_and_shift(h::Quantica.Hamiltonian, unitcells::NTuple, ::Nothing, 
     if length(unitcells) == 2
         sx, sy, sz =  unitcells[1], unitcells[2], missing
     elseif length(unitcells) == 3
-        sx, sy, sz =  unitcells[1], unitcells[2], unitcells[2]
+        sx, sy, sz =  unitcells[1], unitcells[2], unitcells[3]
     else
         throw(ArgumentError("1D not implemented..."))
     end
